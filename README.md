@@ -1,59 +1,42 @@
-# 🚀 Project Name
+# Tech & Accountancy Talent Career Fair 2026
 
-> A short, clear description of what your project does.
+Searchable companion site for the e2i job listing booklet: 106 roles across 10 employers, plus career-centre details.
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)]()
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+Live site: [https://azmiratania.github.io/job-fair/](https://azmiratania.github.io/job-fair/)
 
-## ✨ Overview
-
-**Project Name** is a tool that helps users [describe the main problem your project solves].
-
-It was built to make [specific task] faster, simpler, and more accessible.
-
-### Why?
-
-Traditional approaches require users to:
-
-- ❌ Do things manually
-- ❌ Switch between multiple tools
-- ❌ Spend unnecessary time on repetitive tasks
-
-This project solves that by:
-
-- ✅ Automating repetitive work
-- ✅ Providing a simple interface
-- ✅ Reducing time and effort
-
----
-
-## 🎯 Features
-
-- 🤖 **AI-powered** — Uses AI to [describe capability]
-- ⚡ **Fast** — Get results in seconds
-- 🔒 **Secure** — Your data is handled securely
-- 📊 **Analytics** — Track and understand your results
-- 🎨 **Simple UI** — Designed for ease of use
-
----
-
-## 🛠️ Tech Stack
-
-| Technology | Purpose |
-|------------|---------|
-| Python | Backend |
-| FastAPI | API |
-| React | Frontend |
-| PostgreSQL | Database |
-| Docker | Deployment |
-
----
-
-## 📦 Installation
-
-### 1. Clone the repository
+## Run locally
 
 ```bash
-git clone https://github.com/yourusername/project-name.git
-cd project-name
+cd website
+npm install
+npm run dev
+```
+
+Open [http://localhost:5173](http://localhost:5173).
+
+## Build
+
+```bash
+cd website
+npm run build
+npm run preview
+```
+
+`npm run build` writes static files to `website/dist/`.
+
+## GitHub Pages
+
+The site is a Vite static build. After you push this repo to GitHub:
+
+1. **Settings → Pages** → Source: **GitHub Actions**
+2. Push to `main` (or run the **Deploy to GitHub Pages** workflow)
+
+The workflow publishes `website/dist/`. For this project repo the site is at `https://azmiratania.github.io/job-fair/`.
+
+## Update listings
+
+Job and employer data lives in `website/src/data/fair.json`. To regenerate it from the booklet text dump:
+
+```bash
+python scripts/parse_jobs.py
+```

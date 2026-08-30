@@ -1,10 +1,12 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { getCompany, jobsForCompany, pad } from "../lib";
+import { useTitle } from "../hooks";
 import JobCard from "../components/JobCard";
 
 export default function CompanyDetail() {
   const { id = "" } = useParams();
   const company = getCompany(id);
+  useTitle(company?.name);
   if (!company) return <Navigate to="/companies" replace />;
   const jobs = jobsForCompany(company.id);
 
@@ -13,13 +15,15 @@ export default function CompanyDetail() {
       <p className="kicker">
         <Link to="/companies">Employers</Link> · #{pad(company.number)}
       </p>
-      <div className="panel" style={{ marginBottom: 22 }}>
+      <div className="panel company-hero">
         <h1 style={{ marginTop: 0 }}>{company.name}</h1>
         <div className="chips" style={{ marginBottom: 14 }}>
           <span className="chip">{company.sector}</span>
           <span className="chip">{company.jobCount ? `${company.jobCount} roles` : "Services"}</span>
         </div>
-        <p className="lede" style={{ maxWidth: "70ch" }}>{company.about}</p>
+        <p className="lede" style={{ maxWidth: "70ch" }}>
+          {company.about}
+        </p>
         {company.website ? (
           <a className="btn-ghost" href={company.website} target="_blank" rel="noreferrer">
             Visit website

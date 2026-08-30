@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { fair, pad } from "../lib";
+import { useTitle } from "../hooks";
 
 export default function Companies() {
+  useTitle("Employers");
   return (
     <main>
       <p className="kicker">Booklet directory</p>
@@ -16,7 +18,9 @@ export default function Companies() {
           <Link className="company-card" key={company.id} to={`/companies/${company.id}`}>
             <span className="num">#{pad(company.number)}</span>
             <h3>{company.name}</h3>
-            <p className="muted" style={{ margin: 0 }}>{company.tagline}</p>
+            <p className="muted" style={{ margin: 0 }}>
+              {company.tagline}
+            </p>
             <div className="chips">
               <span className="chip">
                 {company.jobCount ? `${company.jobCount} roles` : "Career services"}

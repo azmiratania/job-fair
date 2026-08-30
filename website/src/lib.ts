@@ -25,6 +25,13 @@ export const categories = unique(fair.jobs.map((j) => j.category));
 export const locations = unique(fair.jobs.map((j) => j.location));
 export const seniorities = unique(fair.jobs.map((j) => j.seniority));
 
+export const categoryCounts = categories
+  .map((name) => ({
+    name,
+    count: fair.jobs.filter((j) => j.category === name).length,
+  }))
+  .sort((a, b) => b.count - a.count);
+
 export function searchJobs(
   jobs: Job[],
   query: string,
@@ -43,6 +50,7 @@ export function searchJobs(
       job.location,
       job.category,
       job.hours,
+      job.seniority,
       ...job.description,
       ...job.requirements,
     ]
@@ -82,3 +90,63 @@ export function toggleShortlist(id: string) {
 export function pad(n: number) {
   return String(n).padStart(2, "0");
 }
+
+export function mapsUrl(query: string) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+export function fairCountdown(now = new Date()) {
+  const start = new Date(`${fair.event.dateIso}T00:00:00`);
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const days = Math.round((start.getTime() - today.getTime()) / 86_400_000);
+  if (days > 1) return { days, label: `${days} days to go`, tone: "soon" as const };
+  if (days === 1) return { days, label: "Tomorrow", tone: "soon" as const };
+  if (days === 0) return { days, label: "Happening today", tone: "today" as const };
+  return { days, label: "Fair has ended", tone: "past" as const };
+}
+
+const LABEL_RE =
+  /^(the role|about the role|what you.?ll (do|bring|be doing)|what you do|ways of working|why accenture|responsibilities|key responsibilities|job description|requirements|qualifications|position responsibilities|here.?s what you need|bonus points if you have|critical success factors|experience & skills|skills & competencies|required qualifications|preferred qualifications|core requirements)$/i;
+
+export function isCopyLabel(text: string) {
+  const t = text.trim().replace(/:+$/, "");
+  if (t.length > 56) return false;
+  if (/:$/.test(text.trim())) return true;
+  return LABEL_RE.test(t);
+}
+
+export function jobSnippet(job: Job, max = 140) {
+  const line = job.description.find((item) => item.length > 40 && !isCopyLabel(item));
+  if (!line) return job.category;
+  return line.length > max ? `${line.slice(0, max).replace(/\s+\S*$/, "")}…` : line;
+}
+
+export function groupJobsByCompany(jobs: Job[]) {
+  const order = hiringCompanies.map((c) => c.id);
+  const groups = new Map<string, Job[]>();
+  for (const job of jobs) {
+    const list = groups.get(job.companyId) ?? [];
+    list.push(job);
+    groups.set(job.companyId, list);
+  }
+  return [...groups.entries()]
+    .sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]))
+    .map(([companyId, items]) => ({
+      company: getCompany(companyId),
+      jobs: items,
+    }));
+}
+
+export const companyAccent: Record<string, string> = {
+  accenture: "#a100ff",
+  "apar-technologies": "#0b6e4f",
+  "forvis-mazars": "#1b365d",
+  "kbx-resources": "#9b1c31",
+  "lit-strategy": "#c45c26",
+  "ncs-group": "#0072ce",
+  "red-alpha-cybersecurity": "#b42318",
+  "rsm-singapore": "#0f766e",
+  "tangspac-consulting": "#1d4e89",
+  e2i: "#e24a12",
+  "e2i-services": "#e24a12",
+};

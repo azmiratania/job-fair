@@ -1,6 +1,7 @@
 import { NavLink, Route, Routes } from "react-router-dom";
-import { useEffect, useState, type ReactNode } from "react";
-import { fair, readShortlist } from "./lib";
+import type { ReactNode } from "react";
+import { fair } from "./lib";
+import { ScrollToTop, useShortlist } from "./hooks";
 import Home from "./pages/Home";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
@@ -9,42 +10,29 @@ import CompanyDetail from "./pages/CompanyDetail";
 import Visit from "./pages/Visit";
 import Shortlist from "./pages/Shortlist";
 
-function useShortlistCount() {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    const sync = () => setCount(readShortlist().length);
-    sync();
-    window.addEventListener("shortlist-change", sync);
-    window.addEventListener("storage", sync);
-    return () => {
-      window.removeEventListener("shortlist-change", sync);
-      window.removeEventListener("storage", sync);
-    };
-  }, []);
-  return count;
-}
-
 function Layout({ children }: { children: ReactNode }) {
-  const saved = useShortlistCount();
+  const { count } = useShortlist();
   return (
     <div className="shell">
-      <header className="topbar">
-        <NavLink to="/" className="brand">
-          <span className="brand-mark">e2i</span>
-          <span className="brand-text">
-            <strong>Talent Career Fair</strong>
-            <em>Tech & Accountancy · 2026</em>
-          </span>
-        </NavLink>
-        <nav className="nav">
-          <NavLink to="/jobs">Roles</NavLink>
-          <NavLink to="/companies">Employers</NavLink>
-          <NavLink to="/visit">Visit</NavLink>
-          <NavLink to="/shortlist" className="nav-saved">
-            Shortlist{saved ? <span>{saved}</span> : null}
+      <div className="topbar-wrap">
+        <header className="topbar">
+          <NavLink to="/" className="brand">
+            <span className="brand-mark">e2i</span>
+            <span className="brand-text">
+              <strong>Talent Career Fair</strong>
+              <em>Tech & Accountancy · 2026</em>
+            </span>
           </NavLink>
-        </nav>
-      </header>
+          <nav className="nav">
+            <NavLink to="/jobs">Roles</NavLink>
+            <NavLink to="/companies">Employers</NavLink>
+            <NavLink to="/visit">Visit</NavLink>
+            <NavLink to="/shortlist" className="nav-saved">
+              Shortlist{count ? <span>{count}</span> : null}
+            </NavLink>
+          </nav>
+        </header>
+      </div>
       {children}
       <footer className="footer">
         <div>
@@ -73,16 +61,19 @@ function Layout({ children }: { children: ReactNode }) {
 
 export default function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/jobs" element={<Jobs />} />
-        <Route path="/jobs/:id" element={<JobDetail />} />
-        <Route path="/companies" element={<Companies />} />
-        <Route path="/companies/:id" element={<CompanyDetail />} />
-        <Route path="/visit" element={<Visit />} />
-        <Route path="/shortlist" element={<Shortlist />} />
-      </Routes>
-    </Layout>
+    <>
+      <ScrollToTop />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/jobs" element={<Jobs />} />
+          <Route path="/jobs/:id" element={<JobDetail />} />
+          <Route path="/companies" element={<Companies />} />
+          <Route path="/companies/:id" element={<CompanyDetail />} />
+          <Route path="/visit" element={<Visit />} />
+          <Route path="/shortlist" element={<Shortlist />} />
+        </Routes>
+      </Layout>
+    </>
   );
 }

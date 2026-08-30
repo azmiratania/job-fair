@@ -1,13 +1,13 @@
-import { fair } from "../lib";
+import { fair, mapsUrl } from "../lib";
+import { useTitle } from "../hooks";
 
 export default function Visit() {
+  useTitle("Visit");
   const { event, centres, hoursNote } = fair;
   return (
     <main>
       <p className="kicker">Plan your day</p>
-      <h1 className="serif" style={{ fontSize: "clamp(36px, 5vw, 56px)", marginTop: 0 }}>
-        {event.name}
-      </h1>
+      <h1 className="serif page-title">{event.name}</h1>
       <div className="job-layout">
         <div className="panel">
           <h2 style={{ marginTop: 0 }}>Fair details</h2>
@@ -23,21 +23,26 @@ export default function Visit() {
             <dt>Nearest MRT</dt>
             <dd>Raffles Place</dd>
           </dl>
-          <p>{event.about}</p>
-          <p>
-            <a className="btn" href={event.website} target="_blank" rel="noreferrer">
+          <div className="actions" style={{ marginTop: 16 }}>
+            <a className="btn" href={mapsUrl(event.address)} target="_blank" rel="noreferrer">
+              Directions
+            </a>
+            <a className="btn-ghost" href={event.website} target="_blank" rel="noreferrer">
               e2i website
             </a>
+          </div>
+          <p className="muted" style={{ marginTop: 18 }}>
+            {event.about}
           </p>
         </div>
         <div className="panel">
-          <h2 style={{ marginTop: 0 }}>How to use this site</h2>
-          <ol className="bullets">
-            <li>Search roles by skill, employer, or location before you arrive.</li>
-            <li>Save a shortlist so you know which booths to visit first.</li>
-            <li>Bring copies of your resume and questions for each role.</li>
-            <li>Return the printed booklet at the exit after interviews.</li>
-          </ol>
+          <h2 style={{ marginTop: 0 }}>Bring this</h2>
+          <ul className="checklist">
+            <li>IC and a few printed resumes</li>
+            <li>Your shortlist, grouped by employer</li>
+            <li>Questions for each booth — not a generic pitch</li>
+            <li>Return the paper booklet at the exit after interviews</li>
+          </ul>
         </div>
       </div>
 
@@ -50,9 +55,14 @@ export default function Visit() {
       <div className="centre-grid">
         {centres.map((centre) => (
           <article className="panel" key={centre.name}>
-            <h3 className="serif" style={{ marginTop: 0 }}>{centre.name}</h3>
+            <h3 className="serif" style={{ marginTop: 0 }}>
+              {centre.name}
+            </h3>
             <p>{centre.address}</p>
             <p className="muted">Nearest MRT: {centre.mrt}</p>
+            <a className="btn-ghost" href={mapsUrl(centre.address)} target="_blank" rel="noreferrer">
+              Open in Maps
+            </a>
           </article>
         ))}
       </div>
