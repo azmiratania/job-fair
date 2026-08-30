@@ -13,6 +13,14 @@ function getBase() {
 function spaFallback() {
   return {
     name: "spa-fallback",
+    transformIndexHtml(html: string) {
+      const base = getBase();
+      if (base === "/") return html;
+      return html
+        .replaceAll('href="/favicon.svg"', `href="${base}favicon.svg"`)
+        .replaceAll('href="/apple-touch-icon.png"', `href="${base}apple-touch-icon.png"`)
+        .replaceAll('href="/manifest.webmanifest"', `href="${base}manifest.webmanifest"`);
+    },
     closeBundle() {
       const index = resolve("dist/index.html");
       copyFileSync(index, resolve("dist/404.html"));

@@ -1,0 +1,23 @@
+{
+  "name": "e2i Talent Career Fair 2026",
+  "short_name": "Career Fair",
+  "description": "Booth plan and booklet roles for the Tech & Accountancy Talent Career Fair.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f0ea",
+  "theme_color": "#0c0b09",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

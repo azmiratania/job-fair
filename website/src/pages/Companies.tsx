@@ -1,6 +1,7 @@
 import { fair } from "../lib";
 import { useTitle } from "../hooks";
 import CompanyCard from "../components/CompanyCard";
+import RecruiterGrid from "../components/RecruiterGrid";
 
 export default function Companies() {
   useTitle("Companies");
@@ -18,6 +19,13 @@ export default function Companies() {
           <CompanyCard key={company.id} company={company} />
         ))}
       </div>
+      <div className="section-head" style={{ marginTop: 48 }}>
+        <div>
+          <h2>Meet the recruiters</h2>
+          <p className="muted">Hiring teams on the floor — names are not listed in the booklet.</p>
+        </div>
+      </div>
+      <RecruiterGrid />
     </main>
   );
 }

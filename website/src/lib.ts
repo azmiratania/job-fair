@@ -171,12 +171,145 @@ export function careersHref(companyId: string) {
   return getCompany(companyId)?.website || undefined;
 }
 
-export function applyHref(job: Job) {
+export type ApplyKind = "search" | "careers" | "site" | "linkedin";
+
+const APPLY_KIND: Record<string, Exclude<ApplyKind, "linkedin">> = {
+  accenture: "search",
+  "forvis-mazars": "search",
+  "ncs-group": "search",
+  "rsm-singapore": "careers",
+  "apar-technologies": "site",
+  "red-alpha-cybersecurity": "site",
+  "tangspac-consulting": "site",
+  e2i: "site",
+};
+
+const APPLY_COPY: Record<ApplyKind, { label: string; hint: string }> = {
+  search: {
+    label: "Apply",
+    hint: "Opens this employer’s careers search for this title. You can also apply at the booth.",
+  },
+  careers: {
+    label: "Careers page",
+    hint: "Opens their careers page — not this specific listing. Search the title, or apply at the booth.",
+  },
+  site: {
+    label: "Company site",
+    hint: "No public job URL in the booklet. Search this title on their site, or apply at the booth.",
+  },
+  linkedin: {
+    label: "Search on LinkedIn",
+    hint: "No careers page listed. This searches LinkedIn, or apply in person at the booth.",
+  },
+};
+
+export function applyMeta(job: Job) {
   const maker = CAREERS[job.companyId];
-  if (maker) return maker(job.title);
   const site = getCompany(job.companyId)?.website;
-  if (site) return site;
-  return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(`${job.company} ${job.title}`)}&location=Singapore`;
+  const href = maker
+    ? maker(job.title)
+    : site ||
+      `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(`${job.company} ${job.title}`)}&location=Singapore`;
+  const kind: ApplyKind = APPLY_KIND[job.companyId] ?? (site ? "site" : "linkedin");
+  return { href, kind, ...APPLY_COPY[kind] };
+}
+
+export function companyApplyMeta(companyId: string) {
+  const href = careersHref(companyId);
+  if (!href) return undefined;
+  const kind: ApplyKind = APPLY_KIND[companyId] ?? "site";
+  const labels: Record<ApplyKind, string> = {
+    search: "Search careers",
+    careers: "Careers page",
+    site: "Company site",
+    linkedin: "Search on LinkedIn",
+  };
+  return { href, label: labels[kind], hint: APPLY_COPY[kind].hint };
+}
+export const suggestedSearches = ["AI", "audit", "ServiceNow", "Avaloq", "PDPA", "cyber"];
+
+export const boothQuestions: Record<string, string[]> = {
+  accenture: [
+    "Is this role on a client project or in managed services — and where is the Singapore team sitting?",
+    "For Avaloq, Sunline, or ServiceNow roles: what platform experience do you expect on day one?",
+    "How do TAP / graduate analysts get staffed onto local work?",
+    "What happens after this booth chat — on-site interview, or apply online later?",
+  ],
+  "apar-technologies": [
+    "Is the Desktop & Workplace Support work on-site with a named client, or rotating?",
+    "For ServiceNow Developer: which modules are you hiring for right now?",
+    "Do you hire as Apar employees or as contractors deployed to clients?",
+  ],
+  "forvis-mazars": [
+    "Is the Associate, Audit & Assurance seat busy-season overtime, and what does that look like in Singapore?",
+    "For tax roles: GST vs financial-services tax — which team is hiring at this booth?",
+    "What does the written test or case at this booth cover?",
+  ],
+  "kbx-resources": [
+    "For Cybersecurity executive: which tools are actually in production — SIEM, EDR, both?",
+    "Does the Data Protection officer role own PDPA end-to-end, or support a larger team?",
+    "Is Business Development selling services, or opening employer accounts?",
+  ],
+  "lit-strategy": [
+    "Are the AI and Automation Engineer projects for SME clients in Singapore or regional?",
+    "For the finance and HR consulting PMs: how large is the delivery team you would join?",
+    "What does a typical first engagement look like in the first 90 days?",
+  ],
+  "ncs-group": [
+    "End User Support vs Network vs Service Delivery — which queue is live at this booth today?",
+    "Are these roles on NCS payroll, and which client site would I report to?",
+    "What shift pattern should I expect for the support and network roles?",
+  ],
+  "red-alpha-cybersecurity": [
+    "Is Cybersecurity Engineer the Alpha graduate path, or do you also hire experienced specialists here?",
+    "Which cloud and engineering seats are still open this afternoon?",
+    "Do you run a technical screen at the booth, or is it a conversation then a later test?",
+  ],
+  "rsm-singapore": [
+    "IT Manager vs Compliance Counsel vs Market Advisor — which hiring manager is at this booth?",
+    "Are professional-services seats in audit/advisory still open, or is this mostly corporate functions?",
+    "What should I bring if you want a CV plus a writing or case sample?",
+  ],
+  "tangspac-consulting": [
+    "Are these operations and IT seats with Tangspac, or placements into client teams?",
+    "KYC Analyst and Data Management Officer — which client industry are you filling first?",
+    "What does ‘contract vs permanent’ look like for the roles on the board?",
+  ],
+  e2i: [
+    "Which transformation or corporate-finance seats are still interviewing today?",
+    "Is this an e2i headcount role, or a placement into a partner employer?",
+    "Can a coach here help me sequence the other booths on my shortlist?",
+  ],
+  "e2i-services": [
+    "Can you match me to booths from the roles I already saved?",
+    "Which SkillsFuture pathways pair with the tech and accountancy seats on the floor?",
+    "What should I fix in my CV before I join an employer queue?",
+  ],
+};
+
+export function questionsForCompany(companyId: string) {
+  return boothQuestions[companyId] ?? [
+    "What does success look like in this role in the first 90 days?",
+    "Who would I report to, and where does the team sit?",
+    "What should I do after this conversation — apply here, or online?",
+  ];
+}
+
+export function shareShortlistText(jobs: Job[]) {
+  const groups = groupJobsByCompany(jobs);
+  const lines = [`e2i Career Fair · 1 Sep 2026 · The Exchange L4`, `${EVENT_HOURS} · Raffles Place MRT`, ""];
+  for (const group of groups) {
+    const n = pad(group.company?.number ?? 0);
+    lines.push(`Booth ${n} ${group.company?.name ?? "Employer"}`);
+    for (const job of group.jobs) lines.push(`• ${job.title}`);
+    lines.push("");
+  }
+  lines.push("Saved on your phone — this text is the backup copy.");
+  return lines.join("\n").trim();
+}
+
+export function whatsappHref(text: string) {
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
 
 export const REGISTER_URL = "https://e2i.sg/TTU1926fb";

@@ -543,6 +543,66 @@ a.company-card { text-decoration: none; color: inherit; }
   to { opacity: 1; transform: none; }
 }
 .cta .btn-lime { position: relative; }
+.cta .btn-ghost { background: transparent; }
+
+a.why-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+.day-card {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 24px;
+  align-items: start;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+  margin: 8px 0 56px;
+}
+.day-card h2 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 40px); }
+.day-steps { margin: 0 0 16px; padding-left: 18px; }
+.day-steps li { margin: 0 0 8px; font-weight: 600; }
+.day-actions { display: flex; flex-direction: column; gap: 8px; }
+.day-actions .btn,
+.day-actions .btn-ghost,
+.day-actions .btn-lime { width: 100%; }
+.install-note { margin: 0; font-size: 13px; color: var(--muted); max-width: 52ch; }
+.plan-card {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.plan-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.plan-head h3 { margin: 0; font-size: 26px; }
+.plan-roles { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.plan-roles li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.plan-roles li a { font-weight: 800; text-decoration: none; }
+.plan-roles .apply-btn { font-size: 12px; padding: 8px 12px; }
+.ask-block { margin: 12px 0 18px; }
+.ask-block h4 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+.ask-list { margin: 0; padding-left: 18px; }
+.ask-list li { margin: 0 0 8px; font-weight: 600; color: var(--ink); }
+.section-head .actions { flex-wrap: wrap; justify-content: flex-end; }
 
 @keyframes drift {
   0%, 100% { transform: translate(0, 0) scale(1); }
@@ -554,7 +614,7 @@ a.company-card { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 920px) {
-  .hero, .job-layout, .filters, .stats, .centre-grid, .why-grid, .booths, .tl-card { grid-template-columns: 1fr; }
+  .hero, .job-layout, .filters, .stats, .centre-grid, .why-grid, .booths, .tl-card, .day-card, .plan-roles li, .plan-head { grid-template-columns: 1fr; }
   .hero-visual { min-height: 340px; }
   .nav-toggle { display: grid; place-items: center; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--ink); color: white; cursor: pointer; }
   .nav {

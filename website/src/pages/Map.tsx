@@ -1,6 +1,7 @@
 import { fair, mapsUrl } from "../lib";
 import { useTitle } from "../hooks";
 import FloorMap from "../components/FloorMap";
+import DayOfCard from "../components/DayOfCard";
 
 export default function MapPage() {
   useTitle("Map");
@@ -19,6 +20,13 @@ export default function MapPage() {
         <a className="btn-ghost" href={mapsUrl(event.address)} target="_blank" rel="noreferrer">
           Directions
         </a>
+      </div>
+      <DayOfCard />
+      <div className="section-head" style={{ marginTop: 36 }}>
+        <div>
+          <h2>Booths</h2>
+          <p>Numbers match the printed booklet.</p>
+        </div>
       </div>
       <FloorMap />
       <p className="muted" style={{ marginTop: 18 }}>

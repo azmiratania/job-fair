@@ -51,7 +51,7 @@ function Layout({ children }: { children: ReactNode }) {
             <NavLink to="/map">Map</NavLink>
             <NavLink to="/faq">FAQ</NavLink>
             <NavLink to="/shortlist" className="nav-saved">
-              Saved{count ? <span>{count}</span> : null}
+              Plan{count ? <span>{count}</span> : null}
             </NavLink>
             <a className="btn" href={REGISTER_URL} target="_blank" rel="noreferrer">
               Register

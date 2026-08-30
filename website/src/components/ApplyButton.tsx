@@ -1,5 +1,5 @@
 import type { Job } from "../types";
-import { applyHref } from "../lib";
+import { applyMeta } from "../lib";
 
 export default function ApplyButton({
   job,
@@ -8,9 +8,10 @@ export default function ApplyButton({
   job: Job;
   className?: string;
 }) {
+  const { href, label, hint } = applyMeta(job);
   return (
-    <a className={className} href={applyHref(job)} target="_blank" rel="noreferrer">
-      Apply
+    <a className={className} href={href} target="_blank" rel="noreferrer" title={hint}>
+      {label}
     </a>
   );
 }

@@ -1,8 +1,9 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { careersHref, getCompany, jobsForCompany, pad } from "../lib";
+import { companyApplyMeta, getCompany, jobsForCompany, pad } from "../lib";
 import { useTitle } from "../hooks";
 import JobCard from "../components/JobCard";
 import CompanyLogo from "../components/CompanyLogo";
+import AskList from "../components/AskList";
 
 export default function CompanyDetail() {
   const { id = "" } = useParams();
@@ -10,7 +11,7 @@ export default function CompanyDetail() {
   useTitle(company?.name);
   if (!company) return <Navigate to="/companies" replace />;
   const jobs = jobsForCompany(company.id);
-  const apply = careersHref(company.id);
+  const apply = companyApplyMeta(company.id);
 
   return (
     <main>
@@ -29,8 +30,8 @@ export default function CompanyDetail() {
         </p>
         <div className="actions">
           {apply ? (
-            <a className="btn-orange" href={apply} target="_blank" rel="noreferrer">
-              Apply / careers
+            <a className="btn-orange" href={apply.href} target="_blank" rel="noreferrer" title={apply.hint}>
+              {apply.label}
             </a>
           ) : null}
           {company.website ? (
@@ -42,6 +43,7 @@ export default function CompanyDetail() {
       </div>
       {jobs.length > 0 ? (
         <>
+          <AskList companyId={company.id} className="panel" />
           <div className="section-head">
             <h2>Open roles</h2>
           </div>
@@ -52,10 +54,13 @@ export default function CompanyDetail() {
           </div>
         </>
       ) : (
-        <div className="note">
-          This booth is for e2i career coaching, job matching, and SkillsFuture advice — not a hiring list.
-          See the <Link to="/map">map</Link> for career centre addresses and hours.
-        </div>
+        <>
+          <AskList companyId={company.id} className="panel" />
+          <div className="note">
+            This booth is for e2i career coaching, job matching, and SkillsFuture advice — not a hiring list.
+            See the <Link to="/map">map</Link> for career centre addresses and hours.
+          </div>
+        </>
       )}
     </main>
   );

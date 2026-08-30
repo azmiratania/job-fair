@@ -3,20 +3,18 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   EVENT_HOURS,
   REGISTER_URL,
-  categoryCounts,
   fair,
   fairCountdown,
   hiringCompanies,
   jobsForCompany,
 } from "../lib";
-import { useTitle } from "../hooks";
+import { useShortlist, useTitle } from "../hooks";
 import CompanyCard from "../components/CompanyCard";
 import CompanyLogo from "../components/CompanyLogo";
-import FloorMap from "../components/FloorMap";
+import DayOfCard from "../components/DayOfCard";
 import JobCard from "../components/JobCard";
-import RecruiterGrid from "../components/RecruiterGrid";
 import Reveal from "../components/Reveal";
-import Timeline from "../components/Timeline";
+import SuggestedSearches from "../components/SuggestedSearches";
 
 const why = [
   {
@@ -51,6 +49,7 @@ export default function Home() {
   const [q, setQ] = useState("");
   const { event, jobs } = fair;
   const countdown = fairCountdown();
+  const { count } = useShortlist();
   const featured = useMemo(
     () =>
       hiringCompanies
@@ -88,12 +87,15 @@ export default function Home() {
             forward.
           </p>
           <div className="actions">
-            <Link className="btn btn-lime" to="/companies">
-              Explore Companies
+            <Link className="btn btn-lime" to="/shortlist">
+              {count ? `Open your booth plan (${count})` : "Open your booth plan"}
             </Link>
             <a className="btn" href={REGISTER_URL} target="_blank" rel="noreferrer">
               Register for the Career Fair
             </a>
+            <Link className="btn-ghost" to="/companies">
+              Explore Companies
+            </Link>
           </div>
           <form className="hero-search" onSubmit={onSearch}>
             <input
@@ -150,6 +152,8 @@ export default function Home() {
         </div>
       </section>
 
+      <DayOfCard />
+
       <Reveal>
         <section className="section" id="why">
           <div className="section-head">
@@ -194,20 +198,13 @@ export default function Home() {
           <div className="section-head">
             <div>
               <h2>Explore opportunities</h2>
-              <p>Filter by industry, then open the full list to refine by role, level, company, and location.</p>
+              <p>Try a skill from the booklet, then open the full list to filter by industry, level, and location.</p>
             </div>
             <Link className="btn-ghost" to="/jobs">
               All {jobs.length} roles
             </Link>
           </div>
-          <div className="chip-row">
-            {categoryCounts.slice(0, 8).map((item) => (
-              <Link className="chip-link" key={item.name} to={`/jobs?category=${encodeURIComponent(item.name)}`}>
-                {item.name}
-                <em>{item.count}</em>
-              </Link>
-            ))}
-          </div>
+          <SuggestedSearches />
           <div className="job-grid">
             {featured.map((job) => (
               <JobCard key={job.id} job={job} />
@@ -217,49 +214,30 @@ export default function Home() {
       </Reveal>
 
       <Reveal>
-        <section className="section" id="schedule">
+        <section className="section" id="floor">
           <div className="section-head">
             <div>
-              <h2>Event schedule</h2>
-              <p>
-                One open floor, {EVENT_HOURS}. There is no published talk timetable — this is how the day actually
-                runs.
-              </p>
+              <h2>On the floor</h2>
+              <p>Open floor all day — no published talk timetable.</p>
             </div>
-            <Link className="btn-ghost" to="/schedule">
-              Full day plan
+          </div>
+          <div className="why-grid" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
+            <Link className="why-card" to="/schedule">
+              <span className="icon i1">10–4</span>
+              <h3>Schedule</h3>
+              <p>Registration, booths, coaching, SkillsFuture, then the fair closes at 16:00.</p>
+            </Link>
+            <Link className="why-card" to="/map">
+              <span className="icon i2">L4</span>
+              <h3>Map</h3>
+              <p>Booklet booth numbers and how to get to The Exchange from Raffles Place.</p>
+            </Link>
+            <Link className="why-card" to="/companies">
+              <span className="icon i3">10</span>
+              <h3>Hiring teams</h3>
+              <p>Meet recruiters at numbered booths — names are not listed in the booklet.</p>
             </Link>
           </div>
-          <Timeline />
-        </section>
-      </Reveal>
-
-      <Reveal>
-        <section className="section" id="recruiters">
-          <div className="section-head">
-            <div>
-              <h2>Meet the recruiters</h2>
-              <p>Hiring teams from every employer on the floor.</p>
-            </div>
-          </div>
-          <RecruiterGrid />
-        </section>
-      </Reveal>
-
-      <Reveal>
-        <section className="section" id="map">
-          <div className="section-head">
-            <div>
-              <h2>Career fair map</h2>
-              <p>
-                Booth numbers from the booklet — not an official floor plan. Use it to visit each employer once.
-              </p>
-            </div>
-            <Link className="btn-ghost" to="/map">
-              Open map
-            </Link>
-          </div>
-          <FloorMap />
         </section>
       </Reveal>
 
@@ -272,9 +250,14 @@ export default function Home() {
           <br />
           {event.venue}
         </p>
-        <a className="btn btn-lime" href={REGISTER_URL} target="_blank" rel="noreferrer">
-          Register Now →
-        </a>
+        <div className="actions" style={{ justifyContent: "center" }}>
+          <a className="btn btn-lime" href={REGISTER_URL} target="_blank" rel="noreferrer">
+            Register Now →
+          </a>
+          <Link className="btn-ghost" to="/shortlist" style={{ color: "white", borderColor: "rgba(255,255,255,0.25)" }}>
+            {count ? `Booth plan (${count})` : "Build a booth plan"}
+          </Link>
+        </div>
       </section>
     </main>
   );

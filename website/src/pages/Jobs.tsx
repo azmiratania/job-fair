@@ -10,6 +10,7 @@ import {
 } from "../lib";
 import { useTitle } from "../hooks";
 import JobCard from "../components/JobCard";
+import SuggestedSearches from "../components/SuggestedSearches";
 
 export default function Jobs() {
   useTitle("Opportunities");
@@ -52,9 +53,20 @@ export default function Jobs() {
           <p className="muted">Filter by industry, role, experience, company, and location.</p>
         </div>
         <Link className="btn-ghost" to="/shortlist">
-          Open shortlist
+          Open booth plan
         </Link>
       </div>
+
+      <p className="muted" style={{ margin: "0 0 8px", fontWeight: 700 }}>
+        Suggested from the booklet
+      </p>
+      <SuggestedSearches
+        active={q}
+        onPick={(term) => {
+          setQ(term);
+          update({ q: term });
+        }}
+      />
 
       <div className="chip-row">
         <button
