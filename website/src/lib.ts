@@ -178,3 +178,75 @@ export function applyHref(job: Job) {
   if (site) return site;
   return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(`${job.company} ${job.title}`)}&location=Singapore`;
 }
+
+export const REGISTER_URL = "https://e2i.sg/TTU1926fb";
+export const EVENT_HOURS = "10:00 AM – 4:00 PM";
+
+export function initials(name: string) {
+  const parts = name
+    .replace(/&/g, " ")
+    .split(/\s+/)
+    .filter((w) => !/^(and|of|the|group|pte|ltd)$/i.test(w));
+  if (parts[0]?.toLowerCase() === "e2i") return "e2";
+  return parts
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+}
+
+export const dayPlan = [
+  {
+    time: "10:00",
+    title: "Registration",
+    body: "Check in at The Exchange, Level 4. Pre-register if you can — walk-ins may be limited.",
+  },
+  {
+    time: "10:00–16:00",
+    title: "Employer booths",
+    body: "Meet hiring teams face-to-face at numbered booths. This is where conversations and on-site interviews happen.",
+  },
+  {
+    time: "All day",
+    title: "Networking",
+    body: "Move between booths, compare notes, and talk to people already doing the work you want next.",
+  },
+  {
+    time: "All day",
+    title: "Skills workshops",
+    body: "Ask e2i about SkillsFuture pathways and high-demand programmes while you are already in the room with employers.",
+  },
+  {
+    time: "All day",
+    title: "Career coaching",
+    body: "e2i coaches are on the floor for job matching, career direction, and interview prep.",
+  },
+  {
+    time: "16:00",
+    title: "Fair closes",
+    body: "Last conversations wrap. Return the printed job listing booklet at the exit after your interviews.",
+  },
+];
+
+export const faqs = [
+  {
+    q: "Do I need to register?",
+    a: "Yes — register on e2i’s event page before you go. Walk-ins may be limited. LTVP/LTVP+ holders should bring PLOC/LOC and an identification pass and register on site.",
+  },
+  {
+    q: "When and where is it?",
+    a: "Tuesday 1 September 2026, 10:00 AM to 4:00 PM at The Exchange, Singapore Land Tower, 50 Raffles Place, Level 4. Nearest MRT: Raffles Place.",
+  },
+  {
+    q: "How do I apply for a role?",
+    a: "Use Apply on any role to open that employer’s careers page. You can also apply in person at their booth during the fair.",
+  },
+  {
+    q: "What should I bring?",
+    a: "IC, a few printed resumes, and a shortlist of booths. This site saves a booth plan on your phone.",
+  },
+  {
+    q: "Is this the official e2i site?",
+    a: "This is a digital companion to the official job listing booklet. Registration and event operations stay on e2i.",
+  },
+];

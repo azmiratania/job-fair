@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { careersHref, getCompany, jobsForCompany, pad } from "../lib";
 import { useTitle } from "../hooks";
 import JobCard from "../components/JobCard";
+import CompanyLogo from "../components/CompanyLogo";
 
 export default function CompanyDetail() {
   const { id = "" } = useParams();
@@ -14,10 +15,11 @@ export default function CompanyDetail() {
   return (
     <main>
       <p className="kicker">
-        <Link to="/companies">Employers</Link> · #{pad(company.number)}
+        <Link to="/companies">Companies</Link> · #{pad(company.number)}
       </p>
       <div className="panel company-hero">
-        <h1 style={{ marginTop: 0 }}>{company.name}</h1>
+        <CompanyLogo id={company.id} name={company.name} size={64} />
+        <h1 style={{ marginTop: 12 }}>{company.name}</h1>
         <div className="chips" style={{ marginBottom: 14 }}>
           <span className="chip">{company.sector}</span>
           <span className="chip">{company.jobCount ? `${company.jobCount} roles` : "Services"}</span>
@@ -52,7 +54,7 @@ export default function CompanyDetail() {
       ) : (
         <div className="note">
           This booth is for e2i career coaching, job matching, and SkillsFuture advice — not a hiring list.
-          See the Visit page for centre addresses and hours.
+          See the <Link to="/map">map</Link> for career centre addresses and hours.
         </div>
       )}
     </main>

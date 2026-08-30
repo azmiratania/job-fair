@@ -1,39 +1,65 @@
-import { NavLink, Route, Routes } from "react-router-dom";
-import type { ReactNode } from "react";
-import { fair } from "./lib";
+import { useEffect, useState, type ReactNode } from "react";
+import { NavLink, Route, Routes, useLocation } from "react-router-dom";
+import { REGISTER_URL, fair } from "./lib";
 import { ScrollToTop, useShortlist } from "./hooks";
 import Home from "./pages/Home";
 import Jobs from "./pages/Jobs";
 import JobDetail from "./pages/JobDetail";
 import Companies from "./pages/Companies";
 import CompanyDetail from "./pages/CompanyDetail";
-import Visit from "./pages/Visit";
 import Shortlist from "./pages/Shortlist";
+import Schedule, { VisitRedirect } from "./pages/Schedule";
+import MapPage from "./pages/Map";
+import Faq from "./pages/Faq";
 
 function Layout({ children }: { children: ReactNode }) {
   const { count } = useShortlist();
+  const location = useLocation();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
   return (
     <div className="shell">
+      <a className="skip" href="#main">
+        Skip to content
+      </a>
       <div className="topbar-wrap">
         <header className="topbar">
           <NavLink to="/" className="brand">
             <span className="brand-mark">e2i</span>
             <span className="brand-text">
-              <strong>Talent Career Fair</strong>
-              <em>Tech & Accountancy · 2026</em>
+              <strong>Career Fair 2026</strong>
+              <em>Tech & Accountancy</em>
             </span>
           </NavLink>
-          <nav className="nav">
-            <NavLink to="/jobs">Roles</NavLink>
-            <NavLink to="/companies">Employers</NavLink>
-            <NavLink to="/visit">Visit</NavLink>
+          <button
+            className="nav-toggle"
+            type="button"
+            aria-expanded={open}
+            aria-label="Menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? "✕" : "☰"}
+          </button>
+          <nav className={open ? "nav open" : "nav"}>
+            <NavLink to="/companies">Companies</NavLink>
+            <NavLink to="/jobs">Opportunities</NavLink>
+            <NavLink to="/schedule">Schedule</NavLink>
+            <NavLink to="/map">Map</NavLink>
+            <NavLink to="/faq">FAQ</NavLink>
             <NavLink to="/shortlist" className="nav-saved">
-              Shortlist{count ? <span>{count}</span> : null}
+              Saved{count ? <span>{count}</span> : null}
             </NavLink>
+            <a className="btn" href={REGISTER_URL} target="_blank" rel="noreferrer">
+              Register
+            </a>
           </nav>
         </header>
       </div>
-      {children}
+      <div id="main">{children}</div>
       <footer className="footer">
         <div>
           <p className="footer-kicker">Organised by</p>
@@ -44,14 +70,14 @@ function Layout({ children }: { children: ReactNode }) {
           </p>
         </div>
         <div className="footer-links">
+          <a href={REGISTER_URL} target="_blank" rel="noreferrer">
+            Register for the fair
+          </a>
           <a href={fair.event.website} target="_blank" rel="noreferrer">
             e2i.com.sg
           </a>
           <a href="https://www.e2i.com.sg/locate-us/" target="_blank" rel="noreferrer">
             Career centres
-          </a>
-          <a href="https://www.e2i.com.sg/JSCTelegram/PMET" target="_blank" rel="noreferrer">
-            PMET job alerts
           </a>
         </div>
       </footer>
@@ -70,7 +96,10 @@ export default function App() {
           <Route path="/jobs/:id" element={<JobDetail />} />
           <Route path="/companies" element={<Companies />} />
           <Route path="/companies/:id" element={<CompanyDetail />} />
-          <Route path="/visit" element={<Visit />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/faq" element={<Faq />} />
+          <Route path="/visit" element={<VisitRedirect />} />
           <Route path="/shortlist" element={<Shortlist />} />
         </Routes>
       </Layout>

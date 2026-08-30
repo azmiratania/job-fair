@@ -3,6 +3,7 @@ import { getCompany, getJob, jobsForCompany, mapsUrl } from "../lib";
 import { useShortlist, useTitle } from "../hooks";
 import JobCopy from "../components/JobCopy";
 import ApplyButton from "../components/ApplyButton";
+import CompanyLogo from "../components/CompanyLogo";
 
 export default function JobDetail() {
   const { id = "" } = useParams();
@@ -20,9 +21,12 @@ export default function JobDetail() {
       </p>
       <div className="job-layout">
         <article className="panel">
-          <span className="num">
-            {job.company} · Role {job.number}
-          </span>
+          <div className="job-card-top" style={{ marginBottom: 12 }}>
+            <CompanyLogo id={job.companyId} name={job.company} size={44} />
+            <span className="num">
+              {job.company} · Role {job.number}
+            </span>
+          </div>
           <h1>{job.title}</h1>
           <div className="chips" style={{ margin: "8px 0 8px" }}>
             <span className="chip">{job.location}</span>

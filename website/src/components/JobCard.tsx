@@ -3,6 +3,7 @@ import type { Job } from "../types";
 import { companyAccent, jobSnippet, toggleShortlist } from "../lib";
 import { useShortlist } from "../hooks";
 import ApplyButton from "./ApplyButton";
+import CompanyLogo from "./CompanyLogo";
 
 export default function JobCard({ job }: { job: Job }) {
   const { saved } = useShortlist(job.id);
@@ -11,7 +12,10 @@ export default function JobCard({ job }: { job: Job }) {
   return (
     <article className="job-card" style={{ borderLeftColor: accent }}>
       <Link className="job-card-link" to={`/jobs/${job.id}`}>
-        <span className="num">{job.company}</span>
+        <div className="job-card-top">
+          <CompanyLogo id={job.companyId} name={job.company} size={36} />
+          <span className="num">{job.company}</span>
+        </div>
         <h3>{job.title}</h3>
         <p className="job-snippet">{jobSnippet(job)}</p>
         <div className="chips">

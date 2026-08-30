@@ -12,7 +12,7 @@ import { useTitle } from "../hooks";
 import JobCard from "../components/JobCard";
 
 export default function Jobs() {
-  useTitle("Roles");
+  useTitle("Opportunities");
   const [params, setParams] = useSearchParams();
   const [q, setQ] = useState(params.get("q") ?? "");
   const filters = {
@@ -48,10 +48,12 @@ export default function Jobs() {
       <p className="kicker">Job listing booklet</p>
       <div className="section-head">
         <div>
-          <h2>All roles</h2>
-          <p className="muted">Search titles, skills, employers, and locations from the fair booklet.</p>
+          <h1 className="page-title">Explore opportunities</h1>
+          <p className="muted">Filter by industry, role, experience, company, and location.</p>
         </div>
-        <Link to="/shortlist">Open shortlist</Link>
+        <Link className="btn-ghost" to="/shortlist">
+          Open shortlist
+        </Link>
       </div>
 
       <div className="chip-row">
@@ -86,8 +88,28 @@ export default function Jobs() {
           placeholder="Search AI, audit, ServiceNow, City Hall…"
           aria-label="Search roles"
         />
-        <select value={filters.company} onChange={(e) => update({ company: e.target.value })} aria-label="Employer">
-          <option value="">All employers</option>
+        <select
+          value={filters.category}
+          onChange={(e) => update({ category: e.target.value })}
+          aria-label="Industry"
+        >
+          <option value="">All industries</option>
+          {categoryCounts.map((c) => (
+            <option key={c.name} value={c.name}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <select value={filters.seniority} onChange={(e) => update({ seniority: e.target.value })} aria-label="Experience level">
+          <option value="">All levels</option>
+          {seniorities.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <select value={filters.company} onChange={(e) => update({ company: e.target.value })} aria-label="Company">
+          <option value="">All companies</option>
           {hiringCompanies.map((c) => (
             <option key={c.id} value={c.id}>
               {c.name}
@@ -97,14 +119,6 @@ export default function Jobs() {
         <select value={filters.location} onChange={(e) => update({ location: e.target.value })} aria-label="Location">
           <option value="">All locations</option>
           {locations.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        <select value={filters.seniority} onChange={(e) => update({ seniority: e.target.value })} aria-label="Level">
-          <option value="">All levels</option>
-          {seniorities.map((c) => (
             <option key={c} value={c}>
               {c}
             </option>
