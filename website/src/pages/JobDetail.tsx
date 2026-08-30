@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { getCompany, getJob, jobsForCompany, mapsUrl } from "../lib";
 import { useShortlist, useTitle } from "../hooks";
 import JobCopy from "../components/JobCopy";
+import ApplyButton from "../components/ApplyButton";
 
 export default function JobDetail() {
   const { id = "" } = useParams();
@@ -33,9 +34,11 @@ export default function JobDetail() {
         </article>
         <aside className="job-aside">
           <div className="panel side-meta sticky-card">
-            <button className={saved ? "btn-orange" : "btn"} type="button" onClick={() => toggle(job.id)}>
+            <ApplyButton job={job} className="btn-orange" />
+            <button className={saved ? "btn-orange" : "btn-ghost"} type="button" onClick={() => toggle(job.id)}>
               {saved ? "Saved to shortlist" : "Save to shortlist"}
             </button>
+            <p className="apply-hint">You can also apply in person at the {job.company} booth on 1 September.</p>
             <dl>
               <dt>Employer</dt>
               <dd>

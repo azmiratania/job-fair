@@ -264,10 +264,9 @@ main { flex: 1; padding: 28px 0 72px; }
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 18px 18px 48px;
+  padding: 18px 18px 12px;
   text-decoration: none;
   flex: 1;
-  min-height: 188px;
 }
 .job-snippet {
   margin: 0;
@@ -278,19 +277,37 @@ main { flex: 1; padding: 28px 0 72px; }
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.save-btn {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
+.card-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 14px;
+  margin-top: auto;
+}
+.apply-btn, .save-btn {
   border: 1px solid var(--line);
   background: var(--white);
   border-radius: 999px;
-  padding: 6px 11px;
+  padding: 7px 12px;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  text-decoration: none;
+  text-align: center;
 }
+.apply-btn {
+  background: var(--ink);
+  color: var(--white);
+  border-color: var(--ink);
+  flex: 1;
+}
+.apply-btn:hover { background: var(--navy); }
+.save-btn { color: var(--ink); }
 .save-btn.on { background: var(--orange); border-color: var(--orange); color: white; }
+.apply-hint {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
 
 .num {
   font-size: 12px;
@@ -389,7 +406,7 @@ main { flex: 1; padding: 28px 0 72px; }
 .footer-links { display: flex; flex-direction: column; gap: 6px; }
 .footer-links a { color: var(--orange-deep); }
 
-.panel > .btn, .panel > .btn-orange { width: 100%; }
+.panel > .btn, .panel > .btn-orange, .panel > .btn-ghost { width: 100%; }
 
 .empty {
   padding: 48px 20px;
@@ -411,7 +428,7 @@ main { flex: 1; padding: 28px 0 72px; }
 }
 
 @media print {
-  .topbar-wrap, .footer, .no-print, .save-btn, .nav { display: none !important; }
+  .topbar-wrap, .footer, .no-print, .nav { display: none !important; }
   body { background: white; }
   .job-card, .panel, .booth { box-shadow: none; }
   .shell { display: block; }

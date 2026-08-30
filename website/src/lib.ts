@@ -150,3 +150,31 @@ export const companyAccent: Record<string, string> = {
   e2i: "#e24a12",
   "e2i-services": "#e24a12",
 };
+
+const CAREERS: Record<string, (title: string) => string> = {
+  accenture: (title) =>
+    `https://www.accenture.com/sg-en/careers/jobsearch?jk=${encodeURIComponent(title)}`,
+  "apar-technologies": () => "https://www.apartechnologies.com",
+  "forvis-mazars": (title) =>
+    `https://careers-asia.forvismazars.com/jobs/?search[keyword]=${encodeURIComponent(title)}`,
+  "ncs-group": (title) =>
+    `https://jobs.smartrecruiters.com/NCS3?search=${encodeURIComponent(title)}`,
+  "rsm-singapore": () => "https://www.rsm.global/singapore/careers/join-our-rsm-family",
+  "red-alpha-cybersecurity": () => "https://www.redalpha.sg",
+  "tangspac-consulting": () => "https://www.tangspac.com",
+  e2i: () => "https://www.e2i.com.sg",
+};
+
+export function careersHref(companyId: string) {
+  const maker = CAREERS[companyId];
+  if (maker) return maker("");
+  return getCompany(companyId)?.website || undefined;
+}
+
+export function applyHref(job: Job) {
+  const maker = CAREERS[job.companyId];
+  if (maker) return maker(job.title);
+  const site = getCompany(job.companyId)?.website;
+  if (site) return site;
+  return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(`${job.company} ${job.title}`)}&location=Singapore`;
+}

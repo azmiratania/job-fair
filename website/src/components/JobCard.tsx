@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import type { Job } from "../types";
 import { companyAccent, jobSnippet, toggleShortlist } from "../lib";
 import { useShortlist } from "../hooks";
+import ApplyButton from "./ApplyButton";
 
 export default function JobCard({ job }: { job: Job }) {
   const { saved } = useShortlist(job.id);
   const accent = companyAccent[job.companyId] ?? "#e24a12";
-  const marked = saved;
 
   return (
     <article className="job-card" style={{ borderLeftColor: accent }}>
@@ -20,15 +20,18 @@ export default function JobCard({ job }: { job: Job }) {
           {job.hours ? <span className="chip">{job.hours}</span> : null}
         </div>
       </Link>
-      <button
-        className={marked ? "save-btn on" : "save-btn"}
-        type="button"
-        aria-label={marked ? "Remove from shortlist" : "Save to shortlist"}
-        aria-pressed={marked}
-        onClick={() => toggleShortlist(job.id)}
-      >
-        {marked ? "Saved" : "Save"}
-      </button>
+      <div className="card-actions no-print">
+        <ApplyButton job={job} />
+        <button
+          className={saved ? "save-btn on" : "save-btn"}
+          type="button"
+          aria-label={saved ? "Remove from shortlist" : "Save to shortlist"}
+          aria-pressed={saved}
+          onClick={() => toggleShortlist(job.id)}
+        >
+          {saved ? "Saved" : "Save"}
+        </button>
+      </div>
     </article>
   );
 }

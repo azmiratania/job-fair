@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from "react-router-dom";
-import { getCompany, jobsForCompany, pad } from "../lib";
+import { careersHref, getCompany, jobsForCompany, pad } from "../lib";
 import { useTitle } from "../hooks";
 import JobCard from "../components/JobCard";
 
@@ -9,6 +9,7 @@ export default function CompanyDetail() {
   useTitle(company?.name);
   if (!company) return <Navigate to="/companies" replace />;
   const jobs = jobsForCompany(company.id);
+  const apply = careersHref(company.id);
 
   return (
     <main>
@@ -24,11 +25,18 @@ export default function CompanyDetail() {
         <p className="lede" style={{ maxWidth: "70ch" }}>
           {company.about}
         </p>
-        {company.website ? (
-          <a className="btn-ghost" href={company.website} target="_blank" rel="noreferrer">
-            Visit website
-          </a>
-        ) : null}
+        <div className="actions">
+          {apply ? (
+            <a className="btn-orange" href={apply} target="_blank" rel="noreferrer">
+              Apply / careers
+            </a>
+          ) : null}
+          {company.website ? (
+            <a className="btn-ghost" href={company.website} target="_blank" rel="noreferrer">
+              Visit website
+            </a>
+          ) : null}
+        </div>
       </div>
       {jobs.length > 0 ? (
         <>
